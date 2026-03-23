@@ -13,8 +13,8 @@ spec:
         app: asgbuggy
     spec:
       containers:
-      - name: asgbuggy
-        image: 145988340565.dkr.ecr.us-west-2.amazonaws.com/asg
+      - name: spidey
+        image: 585008083177.dkr.ecr.us-west-2.amazonaws.com/spidey
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
