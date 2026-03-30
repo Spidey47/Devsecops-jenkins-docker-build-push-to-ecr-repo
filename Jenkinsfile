@@ -57,5 +57,30 @@ pipeline {
       }
     }
 
+    
+    stage('wait_for_testing') {
+      steps {
+        sh '''
+        pwd
+        sleep 180
+        echo "Application Has been deployed on K8S"
+        '''
+      }
+    }
+
+    
+    stage('RunDASTUsingZAP') {
+      steps {
+        withKubeConfig([credentialsId: 'kubelogin']) {
+          sh '''
+          zap.sh -cmd -quickurl http://$(kubectl get svc asgbuggy -n devsecops -o json | jq -r ".status.loadBalancer.ingress[0].hostname") \
+          -quickprogress \
+          -quickout ${WORKSPACE}/zap_report.html
+          '''
+          archiveArtifacts artifacts: 'zap_report.html'
+        }
+      }
+    }
+
   }
 }
